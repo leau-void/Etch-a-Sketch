@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Leau's Etch-a-Sketch</title>
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+    <script src="scripts/script.js" defer></script>
+</head>
+
+<body>
+
+<div id="text-and-buttons-container">
+    <button id="black-color-btn" class="color-btns">Black</button>
+    <input type="color" id="input-color" value="#808599" list="color-options" class="color-btns">
+        <datalist id="color-options">
+            <option>#e40303</option>
+            <option>#ff8c00</option>
+            <option>#ffed00</option>
+            <option>#008026</option>
+            <option>#004dff</option>
+            <option>#750787</option>
+            <option>#7AC6F9</option>
+            <option>#EEA6BA</option>
+            <option>#FFFFFF</option>
+        </datalist>
+    <button id="random-color-btn" class="color-btns">Random Colors</button>
+    <button id="rainbow-colors-btn" class="color-btns">Alternating Rainbow Colors</button>
+    <button id="erase-btn" class="color-btns">Eraser</button>
+    <button id="background-remove-btn">Remove Background</button>
+</div>
+
+<div id="grid-and-slider-container">
+    <div id="grid-container">
+    </div>
+
+    <div id="size-input-div">
+        <input list="size-options" type="range" value="16" min="4" max="100" id="size-slider" class="slider">
+            <datalist id="size-options">
+                <option>8</option>
+                <option>16</option>
+                <option>32</option>
+                <option>64</option>
+                <option>96</option>
+            </datalist>
+        <input id="apply-size-checkbox" class="visually-hidden" type="checkbox">
+        <label id="apply-size-label" for="apply-size-checkbox">Apply</label>
+  </div>
+</div>
+
+</body>
+</html>
