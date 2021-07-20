@@ -32,11 +32,133 @@ sizeSliderLinks.forEach((link) => {
 })
 
 backgroundRemoveButton.addEventListener("click", changeBackground);
-//
+// until this
+
+
+function buildGrid(cellsPerSide) {
+  
+    //remove old cells
+    let oldCells = document.querySelectorAll(".cell");
+    oldCells.forEach((cell) => cell.remove());
+  
+    //grid size container
+    gridContainer.style.gridTemplateColumns = `repeat(${cellsPerSide}, 1fr)`;
+    gridContainer.style.gridTemplateRows = `repeat(${cellsPerSide}, 1fr)`;
+  
+  
+    let cellsTotal = (cellsPerSide ** 2);
+
+    for (let i=0; i < cellsTotal; i++) {
+        let cell = document.createElement("div");
+        cell.classList.add("cell");
+        gridContainer.appendChild(cell);
+    }
+
+    //add eventListeners
+    let cells = document.querySelectorAll(".cell");
+
+    cells.forEach((cell) => {
+        cell.addEventListener("mouseenter", changeCellAtHover)
+    });
+
+}
+
+
+function changeSize() {
+    buildGrid(sizeSlider.value);
+}
+
 
 function setSizeSliderValue() {
     sizeSlider.value = this.title;
 }
+
+
+function changeCellAtHover() {
+    if (typeof currentColor === "function") {
+        this.style.backgroundColor = currentColor(this);
+    } else if (typeof currentColor === "string") {
+        this.style.backgroundColor = currentColor;
+    }
+}
+
+
+function defineColor() {
+    let buttonChoice = this.id;
+    if (buttonChoice === "black-color-btn") {
+        buttonChoice = "black";
+        underlineSelectedButton(this);
+    } else if (buttonChoice === "erase-btn") {
+        buttonChoice = "transparent";
+        underlineSelectedButton(this);
+    } else if (buttonChoice === "random-color-btn") {
+        buttonChoice = randomColor;
+        underlineSelectedButton(this);
+    } else if (buttonChoice === "rainbow-colors-btn") {
+        buttonChoice = alternateRainbowColors;
+        underlineSelectedButton(this);
+    } else if (buttonChoice === "gray-scale-btn") {
+        buttonChoice = darkenGrayScale;
+        underlineSelectedButton(this);
+    } else {
+        buttonChoice = currentColor;
+    }
+
+    currentColor = buttonChoice;
+}
+
+
+function randomColor() {
+    let color = `rgb(${rand(255)}, ${rand(255)}, ${rand(255)})`
+    return color;
+}
+ 
+
+function rand(input) {
+    let output = Math.floor(Math.random() * input)
+    
+    return output;
+}
+
+
+function alternateRainbowColors() {
+    let rainbowColorArray = ["#e40303", "#ff8c00", "#ffed00", "#008026", "#004dff", "#750787"];
+
+    if (colorCounter === 5) {
+        colorCounter = 0;
+    } else {
+        colorCounter++;
+    }
+    return rainbowColorArray[colorCounter];
+}
+
+
+function darkenGrayScale(cell) {
+    let currentCellColor = cell.style.backgroundColor;
+    
+    if (!currentCellColor || currentCellColor[0] !== "r") return "rgb(255, 255, 255)";
+   
+    let arrayCellColorRgb = currentCellColor.split(",");
+    let valueR = arrayCellColorRgb[0].slice(4);
+    let valueG = Number(arrayCellColorRgb[1]);
+    let valueB = arrayCellColorRgb[2].substring(1, arrayCellColorRgb[2].length -1);
+   
+    if (valueR == 0 || valueR != valueG || valueR != valueB || valueR < 25) {
+     return "rgb(255, 255, 255)";
+   } 
+
+   let newRgbValue = (valueR - 25);
+   return `rgb(${newRgbValue}, ${newRgbValue}, ${newRgbValue})`
+}
+
+
+function underlineSelectedButton(selectedButton) {
+    colorChoiceButtons.forEach((button) => {
+        button.style.borderBottom = "2px solid transparent";
+    });
+    selectedButton.style.borderBottom = "2px solid black";
+}
+
 
 function changeBackground() {
     let newBackgroundColor = prompt("What color would you like as a background?\r\n" + 
@@ -84,121 +206,9 @@ function changeBackground() {
     }
 }
 
+
 function isColor(strColor){
     var s = new Option().style;
     s.color = strColor;
     return s.color == strColor;
-}
-
-function defineColor() {
-    let buttonChoice = this.id;
-    if (buttonChoice === "black-color-btn") {
-        buttonChoice = "black";
-        underlineSelectedButton(this);
-    } else if (buttonChoice === "erase-btn") {
-        buttonChoice = "transparent";
-        underlineSelectedButton(this);
-    } else if (buttonChoice === "random-color-btn") {
-        buttonChoice = randomColor;
-        underlineSelectedButton(this);
-    } else if (buttonChoice === "rainbow-colors-btn") {
-        buttonChoice = alternateRainbowColors;
-        underlineSelectedButton(this);
-    } else if (buttonChoice === "gray-scale-btn") {
-        buttonChoice = darkenGrayScale;
-        underlineSelectedButton(this);
-    } else {
-        buttonChoice = currentColor;
-    }
-
-    currentColor = buttonChoice;
-}
-
-function underlineSelectedButton(selectedButton) {
-    colorChoiceButtons.forEach((button) => {
-        button.style.borderBottom = "2px solid transparent";
-    });
-    selectedButton.style.borderBottom = "2px solid black";
-}
-
-function darkenGrayScale(cell) {
-    let currentCellColor = cell.style.backgroundColor;
-    
-    if (!currentCellColor || currentCellColor[0] !== "r") return "rgb(255, 255, 255)";
-   
-    let arrayCellColorRgb = currentCellColor.split(",");
-    let valueR = arrayCellColorRgb[0].slice(4);
-    let valueG = Number(arrayCellColorRgb[1]);
-    let valueB = arrayCellColorRgb[2].substring(1, arrayCellColorRgb[2].length -1);
-   
-    if (valueR == 0 || valueR != valueG || valueR != valueB || valueR < 25) {
-     return "rgb(255, 255, 255)";
-   } 
-
-   let newRgbValue = (valueR - 25);
-   return `rgb(${newRgbValue}, ${newRgbValue}, ${newRgbValue})`
-}
-
-function alternateRainbowColors() {
-    let rainbowColorArray = ["#e40303", "#ff8c00", "#ffed00", "#008026", "#004dff", "#750787"];
-
-if (colorCounter === 5) {
-    colorCounter = 0;
-} else {
-    colorCounter++;
-}
-return rainbowColorArray[colorCounter];
-}
-
-function changeSize() {
-    buildGrid(sizeSlider.value);
-}
-
-function changeCellAtHover() {
-    if (typeof currentColor === "function") {
-        this.style.backgroundColor = currentColor(this);
-    } else if (typeof currentColor === "string") {
-        this.style.backgroundColor = currentColor;
-    }
-}
-
-function buildGrid(cellsPerSide) {
-  
-    //remove old cells
-    let oldCells = document.querySelectorAll(".cell");
-    oldCells.forEach((cell) => cell.remove());
-  
-    //grid size container
-    gridContainer.style.gridTemplateColumns = `repeat(${cellsPerSide}, 1fr)`;
-    gridContainer.style.gridTemplateRows = `repeat(${cellsPerSide}, 1fr)`;
-  
-  
-    let cellsTotal = (cellsPerSide ** 2);
-
-    for (let i=0; i < cellsTotal; i++) {
-        let cell = document.createElement("div");
-        cell.classList.add("cell");
-        gridContainer.appendChild(cell);
-    }
-
-    //add eventListeners
-    let cells = document.querySelectorAll(".cell");
-
-    cells.forEach((cell) => {
-        cell.addEventListener("mouseenter", changeCellAtHover)
-    });
-
-}
-
-
-
-function randomColor() {
-  let color = `rgb(${rand(255)}, ${rand(255)}, ${rand(255)})`
-  return color;
-}
-
-function rand(input) {
-  let output = Math.floor(Math.random() * input)
-  
-  return output;
 }
