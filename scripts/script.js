@@ -2,7 +2,7 @@ const gridContainer = document.querySelector("#grid-container");
 const sizeSlider = document.querySelector("#size-slider");
 let applySizeCheckbox = document.querySelector("#apply-size-checkbox");
 let divColorChoiceButtons = document.querySelector("#color-btns-div");
-let colorCounter = 5;
+let colorCounter = 6;
 let inputColorButton = document.querySelector("#input-color-btn");
 let sizeSliderLinks = document.querySelectorAll(".range-links")
 let labels = document.querySelectorAll("label");
@@ -30,6 +30,13 @@ sizeSliderLinks.forEach((link) => {
     link.addEventListener("click", setSizeSliderValue)
 })
 
+gridContainer.addEventListener("mouseenter", () => {
+  if (event.target.classList.contains("cell")) {
+  let target = event.target;
+  changeCellAtHover(target);
+  }
+}, true)
+
 // until this
 
 
@@ -51,15 +58,6 @@ function buildGrid(cellsPerSide) {
         cell.classList.add("cell");
         gridContainer.appendChild(cell);
     }
-
-    gridContainer.addEventListener("mouseleave", () => {
-      if (event.target.classList.contains("cell")) {
-      let target = event.target;
-      changeCellAtHover(target);
-      }
-    })
-
-
 }
 
 

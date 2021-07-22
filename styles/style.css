@@ -196,6 +196,9 @@ cursor: pointer;
       #color-btns-div > * {
         width: 20px;
       }
+      #size-input-div {
+        width: 80%;
+      }
 
   }
 
@@ -230,6 +233,9 @@ cursor: pointer;
       }
       #color-btns-div > * {
         width: 20px;
+      }
+      #size-input-div {
+        width: 80%;
       }
   }
 

@@ -1,9 +1,5 @@
 Live : https://leau-void.github.io/etch-a-sketch/
-with code before.
 
-here is a live Repl.it with the changes : https://replit.com/@leauvoid/refac-etch-help#script.js
---See at the initial scale of the grid 16x16 the Alternating rainbow works well, with the 6 colors alternating, but when switching any other grid density, the Rainbow color and the gray scale stop working, as if multiple instaces of the function runs at each trigger, and this problem appeared only as I changed from having an event listener on every cell to having an event listener on the Grid Container and passing the function event.target.
-I also noticed I had to use mouseover, which could cause this problem (I had mouseenter before switching the event listenenrs.) I could not get mouseenter or mouseleave to work, even if in the documentation I couldn't find any mention of it not working on children elements(I read the exact opposite actually.)
 
 This is my Etch-a-Sketch project, completed as part of The Odin Project's Foundations.
 
@@ -16,3 +12,5 @@ I feel more familiar with Event Listeners and with DOM manipulation, although I 
 Refactoring the code a little bit, changed from multiple Event Listeners to an Event Delegation model, both for the grid cells, the buttons, and the range slider options.
 
 Also changed these funtions for switch statements for readability.
+
+I removed the Changing Background functionality, since it was causing problems and I think it doesn't fit well in the project.
