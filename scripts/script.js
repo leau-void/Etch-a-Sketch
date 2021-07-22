@@ -1,9 +1,7 @@
 const gridContainer = document.querySelector("#grid-container");
 const sizeSlider = document.querySelector("#size-slider");
 let applySizeCheckbox = document.querySelector("#apply-size-checkbox");
-let colorChoiceButtons = document.querySelectorAll(".color-btns");
-let backgroundRemoveButton = document.querySelector("#background-remove-btn")
-let backgroundHtml = document.querySelector("html");
+let divColorChoiceButtons = document.querySelector("#color-btns-div");
 let colorCounter = 5;
 let inputColorButton = document.querySelector("#input-color-btn");
 let sizeSliderLinks = document.querySelectorAll(".range-links")
@@ -18,9 +16,10 @@ buildGrid(sizeSlider.value);
 
 applySizeCheckbox.addEventListener("change", changeSize);
 
-colorChoiceButtons.forEach((button) => {
-    button.addEventListener("click", defineColor)
-});
+divColorChoiceButtons.addEventListener("click", () => {
+  let target = event.target;
+  if (target.classList.contains("color-btns")) defineColor(target);
+})
 
 inputColorButton.addEventListener("change", () => {
     currentColor = inputColorButton.value;
@@ -31,7 +30,6 @@ sizeSliderLinks.forEach((link) => {
     link.addEventListener("click", setSizeSliderValue)
 })
 
-backgroundRemoveButton.addEventListener("click", changeBackground);
 // until this
 
 
@@ -54,12 +52,13 @@ function buildGrid(cellsPerSide) {
         gridContainer.appendChild(cell);
     }
 
-    //add eventListeners
-    let cells = document.querySelectorAll(".cell");
+    gridContainer.addEventListener("mouseleave", () => {
+      if (event.target.classList.contains("cell")) {
+      let target = event.target;
+      changeCellAtHover(target);
+      }
+    })
 
-    cells.forEach((cell) => {
-        cell.addEventListener("mouseenter", changeCellAtHover)
-    });
 
 }
 
@@ -74,37 +73,53 @@ function setSizeSliderValue() {
 }
 
 
-function changeCellAtHover() {
-    if (typeof currentColor === "function") {
-        this.style.backgroundColor = currentColor(this);
-    } else if (typeof currentColor === "string") {
-        this.style.backgroundColor = currentColor;
+function changeCellAtHover(cellToChange) {
+
+    switch(typeof currentColor) {
+      case "string":
+        cellToChange.style.backgroundColor = currentColor;
+        break;
+      case "function":
+        cellToChange.style.backgroundColor = currentColor(cellToChange);
+        break;
     }
+
 }
 
 
-function defineColor() {
-    let buttonChoice = this.id;
-    if (buttonChoice === "black-color-btn") {
-        buttonChoice = "black";
-        underlineSelectedButton(this);
-    } else if (buttonChoice === "erase-btn") {
-        buttonChoice = "transparent";
-        underlineSelectedButton(this);
-    } else if (buttonChoice === "random-color-btn") {
-        buttonChoice = randomColor;
-        underlineSelectedButton(this);
-    } else if (buttonChoice === "rainbow-colors-btn") {
-        buttonChoice = alternateRainbowColors;
-        underlineSelectedButton(this);
-    } else if (buttonChoice === "gray-scale-btn") {
-        buttonChoice = darkenGrayScale;
-        underlineSelectedButton(this);
-    } else {
-        buttonChoice = currentColor;
-    }
+function defineColor(buttonPressed) {
+  let buttonPressedId = buttonPressed.id
+  let colorChoice;
+  
+  underlineSelectedButton(buttonPressed);
 
-    currentColor = buttonChoice;
+  switch(buttonPressedId) {
+    case "black-color-btn":
+      colorChoice = "black";
+      break;
+
+    case "erase-btn":
+      colorChoice = "transparent";
+      break;
+
+    case "random-color-btn":
+      colorChoice = randomColor;
+      break;
+
+    case "rainbow-colors-btn":
+      colorChoice = alternateRainbowColors;
+      break;
+
+    case "gray-scale-btn":
+      colorChoice = darkenGrayScale;
+      break;
+
+    default:
+      colorChoice = currentColor;
+    
+  }
+
+    currentColor = colorChoice;
 }
 
 
@@ -124,12 +139,12 @@ function rand(input) {
 function alternateRainbowColors() {
     let rainbowColorArray = ["#e40303", "#ff8c00", "#ffed00", "#008026", "#004dff", "#750787"];
 
-    if (colorCounter === 5) {
+    if (colorCounter === 6) {
         colorCounter = 0;
-    } else {
-        colorCounter++;
-    }
-    return rainbowColorArray[colorCounter];
+    } //else {
+     //   colorCounter++;
+    //}
+    return rainbowColorArray[colorCounter++];
 }
 
 
@@ -153,62 +168,14 @@ function darkenGrayScale(cell) {
 
 
 function underlineSelectedButton(selectedButton) {
+  let colorChoiceButtons = document.querySelectorAll("#color-btns-div > *");
+
     colorChoiceButtons.forEach((button) => {
         button.style.borderBottom = "2px solid transparent";
     });
+  let colorChoiceButtonsHover = document.querySelectorAll("#color-btns-div > *:hover");
+    colorChoiceButtonsHover.forEach((button) => {
+      button.style.borderBottom = "2px solid black";
+    })
     selectedButton.style.borderBottom = "2px solid black";
-}
-
-
-function changeBackground() {
-    let newBackgroundColor = prompt("What color would you like as a background?\r\n" + 
-    "Type Black or White to change the grid lines to the opposite color.\r\n" + "Type 'default-background' to get the background image back.", "black");
-    if (!!newBackgroundColor) newBackgroundColor = newBackgroundColor.toLowerCase();
-    if (!!newBackgroundColor && isColor(newBackgroundColor)) {
-        backgroundHtml.style.backgroundColor = newBackgroundColor;
-        backgroundHtml.style.backgroundImage = "none";
-        if (newBackgroundColor === "black") {
-            //change border colors so they can be seen
-            //only works with black, would like to find a fix
-            gridContainer.style.borderColor = "white";
-            let cells = document.querySelectorAll(".cell");
-            cells.forEach((cell) => {
-                cell.style.borderColor = "white";
-            })
-            backgroundHtml.style.color = "white";
-            labels.forEach((label) => {
-                label.style.color = "white";
-            });
-        } else if (newBackgroundColor === "white") {
-            gridContainer.style.borderColor = "black";
-            let cells = document.querySelectorAll(".cell");
-            cells.forEach((cell) => {
-            cell.style.borderColor = "black";
-            })
-            backgroundHtml.style.color = "black";
-            labels.forEach((label) => {
-                label.style.color = "black";
-            });
-        }
-    } else if (!!newBackgroundColor && newBackgroundColor === "default-background") {
-            backgroundHtml.style.backgroundImage = "url(../images/wanderer-1920x1080.jpg)";
-            backgroundHtml.style.backgroundColor = "none";
-            colorChoiceButtons.forEach((button) => {
-                button.style.color = "black";
-             });
-            backgroundRemoveButton.style.color = "black";
-            backgroundHtml.style.color = "black";
-            labels.forEach((label) => {
-                label.style.color = "white";
-            });
-    } else if (!!newBackgroundColor && !(isColor(newBackgroundColor))) {
-        alert("Invalid input.")
-    }
-}
-
-
-function isColor(strColor){
-    var s = new Option().style;
-    s.color = strColor;
-    return s.color == strColor;
 }

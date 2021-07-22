@@ -53,6 +53,10 @@ body {
   font-weight: inherit;
 }
 
+button:hover {
+  border-bottom: 2px solid black !important;
+}
+
 #random-color-btn {
   border-bottom: 2px solid black;
 }
@@ -65,7 +69,6 @@ body {
 width: 70%;
 height: fit-content;
 margin: auto auto;
-color: whitesmoke;
 }
 
 #grid-container {
@@ -112,8 +115,7 @@ option {
 
 .range-links, .range-links:visited {
   text-decoration: none;
-  color: inherit;
-
+  color: whitesmoke;
 }
 
 #range-links-div {
@@ -121,7 +123,6 @@ option {
   mix-blend-mode: difference;
   display: flex;
   text-align: center;
- /* justify-content: space-evenly; */
 }
 
 .range-links[title="8"] {
@@ -147,14 +148,19 @@ width: 8.5%;
 }
 
 #size-slider-label {
+  color: whitesmoke;
+
   margin: 5px auto;
   font-size: 1.1rem;
 }
 
 #apply-size-label {
+  color: whitesmoke;
+
 text-decoration: underline;
 font-size: 2rem;
 margin: 0 auto;
+cursor: pointer;
 }
 
 @media (orientation: portrait) and (max-width: 843px) and (max-height: 1080px) {
